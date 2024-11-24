@@ -53,7 +53,6 @@ class Librarian(User):
 class UserFactory:
     @staticmethod
     def generate_user_id():
-        # Generuje losowy numer identyfikacyjny w formie Sxxxxxx, Txxxxxx, Lxxxxxx
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
     @staticmethod
