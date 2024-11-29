@@ -39,4 +39,3 @@ class MockPaymentGateway(PaymentGateway):
         self.status_queries.append(transaction_id)
         
         return self.transaction_status
-    
