@@ -1,8 +1,13 @@
 import logging
 
-from payment_gateway import (NetworkException, PaymentException,
-                             PaymentGateway, RefundException,
-                             TransactionResult, TransactionStatus)
+from payment_gateway import (
+    NetworkException,
+    PaymentException,
+    PaymentGateway,
+    RefundException,
+    TransactionResult,
+    TransactionStatus,
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

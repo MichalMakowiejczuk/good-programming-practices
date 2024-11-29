@@ -9,51 +9,72 @@ on:
       - TDD
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Install Python
-      - name: Set up Python
+      - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
-      # 3. Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pytest-cov flake8 isort  # Dodajemy isort
+          pip install -r requirements.txt
 
-      # 4. Sort imports with isort (now checking and fixing imports)
-      - name: Sort imports with isort
-        run: |
-          isort TDD/  # Uruchomienie isort na folderze TDD, który zawiera pliki Pythona
-
-      # 5. Unit tests
       - name: Run tests with coverage
         run: |
-          pytest --cov=src --cov-report=xml --cov-report=term-missing
+          pytest --maxfail=1 --disable-warnings -q --cov=src --cov-report=xml
 
-      # 6. Linting with Super-Linter
-      - name: Linting with Super-Linter
-        uses: github/super-linter@v5
-        env:
-          VALIDATE_PYTHON: true
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: coverage.xml
 
-      # 7. Format code with Super-Linter
-      - name: Format code with Super-Linter
-        if: always()
-        uses: github/super-linter@v5
-        env:
-          VALIDATE_PYTHON: true
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: .github/linter-rules
-          FORMAT_CODE: true
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Super Linter
+        run: |
+          curl -sSL https://raw.githubusercontent.com/github/super-linter/main/TEMPLATES/linter.yml -o .super-linter.yml
+          curl -sSL https://raw.githubusercontent.com/github/super-linter/main/config/linters/python/linter.sh -o .super-linter.sh
+          chmod +x .super-linter.sh
+
+      # 3. Lintowanie kodu
+      - name: Run Super Linter
+        run: |
+          ./super-linter.sh
+
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Super Linter formatter
+        run: |
+          super-linter --run-format
