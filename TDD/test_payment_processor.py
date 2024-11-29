@@ -1,13 +1,8 @@
 import unittest
-from payment_gateway import (
-    TransactionResult,
-    TransactionStatus,
-    NetworkException,
-    PaymentException,
-    RefundException,
-)
-from payment_processor import PaymentProcessor
+
 from mock_payment_gateway import MockPaymentGateway
+from payment_gateway import TransactionStatus
+from payment_processor import PaymentProcessor
 
 
 class PaymentProcessorTest(unittest.TestCase):

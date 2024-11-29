@@ -1,11 +1,6 @@
-from payment_gateway import (
-    PaymentGateway,
-    TransactionResult,
-    TransactionStatus,
-    NetworkException,
-    PaymentException,
-    RefundException,
-)
+from payment_gateway import (NetworkException, PaymentException,
+                             PaymentGateway, RefundException,
+                             TransactionResult, TransactionStatus)
 
 
 class MockPaymentGateway(PaymentGateway):
