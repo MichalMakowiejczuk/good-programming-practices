@@ -1,5 +1,11 @@
 import unittest
-from payment_gateway import TransactionResult, TransactionStatus, NetworkException, PaymentException, RefundException
+from payment_gateway import (
+    TransactionResult,
+    TransactionStatus,
+    NetworkException,
+    PaymentException,
+    RefundException,
+)
 from payment_processor import PaymentProcessor
 from mock_payment_gateway import MockPaymentGateway
 
@@ -32,11 +38,11 @@ class PaymentProcessorTest(unittest.TestCase):
     def test_process_payment_invalid_amount(self):
         with self.assertRaises(ValueError):
             self.payment_processor.process_payment("user123", -50)
-    
+
     def test_get_payment_status_empty_transaction_id(self):
         with self.assertRaises(ValueError):
             self.payment_processor.get_payment_status("")
-    
+
     def test_refund_payment_successful(self):
         result = self.payment_processor.refund_payment("txn123")
         self.assertTrue(result.success)
@@ -63,6 +69,5 @@ class PaymentProcessorTest(unittest.TestCase):
         self.assertNotIn("txn123", self.payment_gateway.status_queries)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
-

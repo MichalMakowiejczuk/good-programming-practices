@@ -2,25 +2,36 @@ from abc import ABC, abstractmethod
 from typing import Optional
 from enum import Enum
 
+
 class TransactionStatus(Enum):
     PENDING = "PENDING"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
 
+
 class TransactionResult:
-    def __init__(self, success: bool, transaction_id: Optional[str] = None, message: Optional[str] = None):
+    def __init__(
+        self,
+        success: bool,
+        transaction_id: Optional[str] = None,
+        message: Optional[str] = None,
+    ):
         self.success = success
         self.transaction_id = transaction_id
         self.message = message
 
+
 class NetworkException(Exception):
     pass
+
 
 class PaymentException(Exception):
     pass
 
+
 class RefundException(Exception):
     pass
+
 
 class PaymentGateway(ABC):
     @abstractmethod
